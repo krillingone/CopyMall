@@ -1,0 +1,84 @@
+package com.krill.mall.product.controller;
+
+import com.krill.common.utils.PageUtils;
+import com.krill.common.utils.R;
+import com.krill.mall.product.entity.SkuInfoEntity;
+import com.krill.mall.product.service.SkuInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
+
+
+
+/**
+ * sku信息
+ *
+ * @author krill9594
+ * @email krilling.one@gmail.com
+ * @date 2021-03-16 22:17:49
+ */
+@RestController
+@RequestMapping("product/skuinfo")
+public class SkuInfoController {
+    @Autowired
+    private SkuInfoService skuInfoService;
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:skuinfo:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = skuInfoService.queryPageByCondition(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{skuId}")
+    //@RequiresPermissions("product:skuinfo:info")
+    public R info(@PathVariable("skuId") Long skuId){
+		SkuInfoEntity skuInfo = skuInfoService.getById(skuId);
+
+        return R.ok().put("skuInfo", skuInfo);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:skuinfo:save")
+    public R save(@RequestBody SkuInfoEntity skuInfo){
+		skuInfoService.save(skuInfo);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:skuinfo:update")
+    public R update(@RequestBody SkuInfoEntity skuInfo){
+		skuInfoService.updateById(skuInfo);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:skuinfo:delete")
+    public R delete(@RequestBody Long[] skuIds){
+		skuInfoService.removeByIds(Arrays.asList(skuIds));
+
+        return R.ok();
+    }
+
+}
